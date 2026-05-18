@@ -6,7 +6,7 @@ function initSite() {
   initPopupSystem();
   initCookieConsent();
   renderApprovedReviews();
-  initTestimonialsTicker();
+  initReviewsCarousel();
   initReviewForm();
   initContactForm();
   setCurrentYear();
@@ -317,6 +317,7 @@ function initContactForm() {
 function initReviewForm() {
   const form = document.getElementById('review-form');
   const message = document.querySelector('.review-form-message');
+  const reviewSubmit = document.querySelector('.review-submit');
 
   if (!form || !message) {
     return;
@@ -338,8 +339,8 @@ function initReviewForm() {
       status: 'pending'
     };
 
-    if (!payload.name || !payload.business || !payload.email || !payload.projectCode || !payload.rating || payload.message.length < 40) {
-      message.textContent = 'Prosím vyplňte všetky polia. Text recenzie má mať aspoň 40 znakov.';
+    if (!payload.name || !payload.business || !payload.email || !payload.projectCode || !payload.rating || payload.message.length < 15) {
+      message.textContent = 'Prosím vyplňte všetky polia. Text recenzie má mať aspoň 15 znakov.';
       return;
     }
 
@@ -352,12 +353,25 @@ function initReviewForm() {
       return;
     }
 
+    // Úspešné odoslanie - skryť formulár a zobrazit iba správu
+    if (reviewSubmit) {
+      form.style.display = 'none';
+      const label = document.querySelector('label[for="review-message"]');
+      if (label) label.style.display = 'none';
+      const hint = document.querySelector('.form-hint');
+      if (hint) hint.style.display = 'none';
+    }
+
     message.textContent = 'Ďakujeme, recenziu sme prijali na schválenie. Po overení klientského kódu ju môžeme publikovať.';
+    message.style.fontSize = '1.05rem';
+    message.style.fontWeight = '600';
+    message.style.color = '#b3e5fc';
+    message.style.marginTop = '2rem';
+    
     openCustomPopup(
       'Recenzia prijatá',
       'Recenziu sme zaradili na schválenie. Na web sa pridáva až po manuálnom overení projektu.'
     );
-    form.reset();
   });
 }
 
@@ -404,72 +418,6 @@ function renderApprovedReviews() {
   });
 
   container.appendChild(fragment);
-}
-
-function initTestimonialsTicker() {
-  const track = document.getElementById('reviews-list');
-
-  if (!track || track.children.length < 2) {
-    return;
-  }
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    return;
-  }
-
-  let isPaused = false;
-  let offset = 0;
-  let direction = 1;
-  let rafId = 0;
-
-  const step = () => {
-    const maxOffset = Math.max(0, track.scrollWidth - track.clientWidth);
-
-    if (maxOffset <= 0) {
-      rafId = requestAnimationFrame(step);
-      return;
-    }
-
-    if (offset === 0 && track.scrollLeft === 0) {
-      offset = maxOffset / 2;
-      track.scrollLeft = offset;
-    }
-
-    if (!isPaused) {
-      offset += 0.45 * direction;
-
-      if (offset >= maxOffset) {
-        offset = maxOffset;
-        direction = -1;
-      } else if (offset <= 0) {
-        offset = 0;
-        direction = 1;
-      }
-
-      track.scrollLeft = offset;
-    }
-
-    rafId = requestAnimationFrame(step);
-  };
-
-  track.addEventListener('mouseenter', () => {
-    isPaused = true;
-  });
-
-  track.addEventListener('mouseleave', () => {
-    isPaused = false;
-  });
-
-  track.addEventListener('touchstart', () => {
-    isPaused = true;
-  }, { passive: true });
-
-  track.addEventListener('touchend', () => {
-    isPaused = false;
-  }, { passive: true });
-
-  cancelAnimationFrame(rafId);
-  rafId = requestAnimationFrame(step);
 }
 
 function createReviewCard(review) {
@@ -527,6 +475,82 @@ function getStarsText(value) {
   const filled = '★★★★★'.slice(0, numericValue);
   const empty = '☆☆☆☆☆'.slice(0, 5 - numericValue);
   return `${filled}${empty}`;
+}
+
+// Initialize reviews carousel
+function initReviewsCarousel() {
+  const reviewCard = document.getElementById('current-review');
+  const prevBtn = document.querySelector('.carousel-btn--prev');
+  const nextBtn = document.querySelector('.carousel-btn--next');
+  const indicators = document.querySelectorAll('.indicator');
+
+  if (!reviewCard || !prevBtn || !nextBtn || !window.allReviewsData) {
+    return;
+  }
+
+  const reviews = window.allReviewsData;
+
+  if (reviews.length === 0) {
+    return;
+  }
+
+  // Function to display review at index
+  function displayReview(index, direction = 'next') {
+    const review = reviews[index];
+    const h3 = reviewCard.querySelector('h3');
+    const starsP = reviewCard.querySelector('.stars');
+    const quoteP = reviewCard.querySelector('.quote');
+    const authorP = reviewCard.querySelector('.author');
+
+    // Remove previous animation classes
+    reviewCard.classList.remove('animate-next', 'animate-prev');
+
+    // Trigger reflow to restart animation
+    void reviewCard.offsetWidth;
+
+    // Add animation class
+    reviewCard.classList.add(`animate-${direction}`);
+
+    // Update content
+    h3.textContent = review.data.title;
+    starsP.textContent = getStarsText(review.data.rating);
+    quoteP.textContent = `"${review.body}"`;
+    authorP.textContent = `— ${review.data.author}`;
+
+    // Update indicators
+    indicators.forEach((indicator, idx) => {
+      indicator.classList.toggle('is-active', idx === index);
+    });
+
+    window.currentReviewIndex = index;
+  }
+
+  // Next review
+  function showNext() {
+    const nextIndex = (window.currentReviewIndex + 1) % reviews.length;
+    displayReview(nextIndex, 'next');
+  }
+
+  // Previous review
+  function showPrev() {
+    const prevIndex = (window.currentReviewIndex - 1 + reviews.length) % reviews.length;
+    displayReview(prevIndex, 'prev');
+  }
+
+  // Event listeners
+  nextBtn.addEventListener('click', showNext);
+  prevBtn.addEventListener('click', showPrev);
+
+  indicators.forEach((indicator) => {
+    indicator.addEventListener('click', (e) => {
+      const index = parseInt(e.target.dataset.index, 10);
+      const direction = index > window.currentReviewIndex ? 'next' : 'prev';
+      displayReview(index, direction);
+    });
+  });
+
+  // Initialize with first review
+  displayReview(0, 'next');
 }
 
 // Sets current year in footer.

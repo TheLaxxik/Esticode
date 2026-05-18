@@ -304,21 +304,51 @@ const allReviews = await getCollection('reviews');
         </header>
         
         {/* ŽIVÝ ASTRO CYKLUS PRE DYNAMICKÉ STRÁŽENIE RECENZIÍ */}
-        <div class="testimonials-marquee fade-in" aria-label="Posuvne recenzie klientov">
-          <div class="testimonials-grid" style="display: flex; gap: 20px; flex-direction: column; margin-block-end: 40px;">
-            {allReviews.map((review) => (
-              <div class="review-card" style="border: 1px solid #333; padding: 20px; border-radius: 8px; background: rgba(255,255,255,0.03);">
-                <h3 style="margin: 0 0 5px 0; font-size: 1.25rem;">{review.data.title}</h3>
-                <p style="margin: 0 0 10px 0; color: #ffd700;">
-                  {"★".repeat(review.data.rating)}{"☆".repeat(5 - review.data.rating)}
-                </p>
-                <p style="margin: 0 0 10px 0; font-style: italic; opacity: 0.9;">"{review.body}"</p>
-                <p style="margin: 0; font-size: 0.85rem; opacity: 0.6;">— {review.data.author}</p>
-              </div>
-            ))}
-
+        <div class="testimonials-marquee fade-in" aria-label="Recenzie klientov">
+          <div class="reviews-carousel">
             {allReviews.length === 0 && (
               <p class="section-note">Zatiaľ tu nie sú žiadne recenzie. Pridajte novú cez Keystatic admin panel!</p>
+            )}
+            
+            {allReviews.length > 0 && (
+              <>
+                <button class="carousel-btn carousel-btn--prev" aria-label="Predchádzajúca recenzia" title="Predchádzajúca">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+                
+                <div class="review-card" id="current-review">
+                  <h3></h3>
+                  <p class="stars"></p>
+                  <p class="quote"></p>
+                  <p class="author"></p>
+                </div>
+                
+                <button class="carousel-btn carousel-btn--next" aria-label="Ďalšia recenzia" title="Ďalšia">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+                
+                <div class="carousel-indicators">
+                  {allReviews.map((_, index) => (
+                    <button 
+                      class={`indicator ${index === 0 ? 'is-active' : ''}`}
+                      aria-label={`Recenzia ${index + 1}`}
+                      data-index={index}
+                    ></button>
+                  ))}
+                </div>
+
+                <script define:vars={{ reviewsCount: allReviews.length, reviews: allReviews }}>
+                  {
+                    // Dáta recenzií sa prejavia v globálnom scope
+                    window.allReviewsData = reviews;
+                    window.currentReviewIndex = 0;
+                  }
+                </script>
+              </>
             )}
           </div>
         </div>
@@ -361,7 +391,7 @@ const allReviews = await getCollection('reviews');
             </select>
 
             <label for="review-message">Text recenzie</label>
-            <textarea id="review-message" name="review-message" rows="5" minlength="40" placeholder="Napíšte stručne, čo vám spolupráca priniesla..." required></textarea>
+            <textarea id="review-message" name="review-message" rows="5" minlength="15" maxlength="300" placeholder="Napíšte stručne, čo vám spolupráca priniesla..." required></textarea>
 
             <div class="form-footer">
               <button class="button button-primary" type="submit">Poslať recenziu na schválenie</button>
@@ -381,7 +411,6 @@ const allReviews = await getCollection('reviews');
         <a href="/ochrana-osobnych-udajov">Ochrana osobných údajov</a>
         <a href="/cookies">Cookies</a>
         <a href="/obchodne-podmienky">Obchodné podmienky</a>
-        <a href="/keystatic">Admin recenzií</a>
       </nav>
     </div>
   </footer>
