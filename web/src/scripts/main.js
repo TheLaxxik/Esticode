@@ -327,51 +327,64 @@ function initReviewForm() {
     event.preventDefault();
 
     const data = new FormData(form);
-    const payload = {
-      id: `review-${Date.now()}`,
-      name: String(data.get('review-name') || '').trim(),
-      business: String(data.get('review-business') || '').trim(),
-      email: String(data.get('review-email') || '').trim(),
-      projectCode: String(data.get('review-project-code') || '').trim(),
-      rating: String(data.get('review-rating') || '').trim(),
-      message: String(data.get('review-message') || '').trim(),
-      submittedAt: new Date().toISOString(),
-      status: 'pending'
-    };
+    
+    // Validácia povinných polí
+    const name = String(data.get('review-name') || '').trim();
+    const business = String(data.get('review-business') || '').trim();
+    const email = String(data.get('review-email') || '').trim();
+    const projectCode = String(data.get('review-project-code') || '').trim();
+    const rating = String(data.get('review-rating') || '').trim();
+    const messageText = String(data.get('review-message') || '').trim();
 
-    if (!payload.name || !payload.business || !payload.email || !payload.projectCode || !payload.rating || payload.message.length < 15) {
+    if (!name || !business || !email || !projectCode || !rating || messageText.length < 15) {
       message.textContent = 'Prosím vyplňte všetky polia. Text recenzie má mať aspoň 15 znakov.';
       return;
     }
 
     message.textContent = 'Odosielam recenziu na schválenie...';
 
-    const sent = await submitReviewForModeration(payload);
+    try {
+      // Odoslanie dát na API endpoint
+      const response = await fetch('/api/review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: business,
+          author: name,
+          rating: parseInt(rating, 10),
+          content: messageText
+        })
+      });
 
-    if (!sent) {
-      message.textContent = 'Recenziu sa teraz nepodarilo odoslať. Skúste to znova alebo kontaktujte nás emailom.';
-      return;
-    }
+      const result = await response.json();
 
-    // Úspešné odoslanie - skryť formulár a zobrazit iba správu
-    if (reviewSubmit) {
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Neznáma chyba pri odosielaní recenzie');
+      }
+
+      // Úspešné odoslanie - skryť formulár a zobrazit iba správu
       form.style.display = 'none';
       const label = document.querySelector('label[for="review-message"]');
       if (label) label.style.display = 'none';
       const hint = document.querySelector('.form-hint');
       if (hint) hint.style.display = 'none';
-    }
 
-    message.textContent = 'Ďakujeme, recenziu sme prijali na schválenie. Po overení klientského kódu ju môžeme publikovať.';
-    message.style.fontSize = '1.05rem';
-    message.style.fontWeight = '600';
-    message.style.color = '#b3e5fc';
-    message.style.marginTop = '2rem';
-    
-    openCustomPopup(
-      'Recenzia prijatá',
-      'Recenziu sme zaradili na schválenie. Na web sa pridáva až po manuálnom overení projektu.'
-    );
+      message.textContent = 'Ďakujeme, recenziu sme prijali na schválenie. Po overení klientského kódu ju môžeme publikovať.';
+      message.style.fontSize = '1.05rem';
+      message.style.fontWeight = '600';
+      message.style.color = '#b3e5fc';
+      message.style.marginTop = '2rem';
+      
+      openCustomPopup(
+        'Recenzia prijatá',
+        'Recenziu sme zaradili na schválenie. Na web sa pridáva až po manuálnom overení projektu.'
+      );
+    } catch (error) {
+      console.error('Chyba pri odosielaní recenzie:', error);
+      message.textContent = 'Recenziu sa teraz nepodarilo odoslať. Skúste to znova alebo kontaktujte nás emailom.';
+    }
   });
 }
 

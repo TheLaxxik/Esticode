@@ -13,6 +13,10 @@
     "author": {
       "type": "string"
     },
+    "approved": {
+      "default": false,
+      "type": "boolean"
+    },
     "$schema": {
       "type": "string"
     }

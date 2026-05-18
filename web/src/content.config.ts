@@ -8,6 +8,7 @@ const reviews = defineCollection({
     title: z.string(),
     rating: z.number().min(1).max(5),
     author: z.string(),
+    approved: z.boolean().default(false),
   }),
 });
 

@@ -3,8 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 
-// Načítame všetky schválené recenzie z Keystaticu (priečinok src/content/reviews/)
+// Načítame všetky recenzie z Keystaticu (priečinok src/content/reviews/)
 const allReviews = await getCollection('reviews');
+
+// Filtrujeme iba schválené recenzie
+const approvedReviews = allReviews.filter(review => review.data.approved === true);
 ---
 
 <BaseLayout
@@ -58,7 +61,7 @@ const allReviews = await getCollection('reviews');
       <div class="container fade-in">
         <p class="kicker">Esticode z Košíc</p>
         <h1>Tvoríme weby pre kaviarne a malé firmy na Slovensku</h1>
-        <p class="lead">Navrhujeme and kódujeme čisté, rýchle weby, ktoré pôsobia profesionálne a fungujú bez kompromisov na mobile aj desktope.</p>
+        <p class="lead">Navrhujeme and kódujeme čisté, rýchle weby, ktoré pôsoatia profesionálne a fungujú bez kompromisov na mobile aj desktope.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#portfolio">Pozrieť portfólio</a>
           <a class="button button-outline" href="#kontakt">Kontaktovať nás</a>
@@ -303,14 +306,13 @@ const allReviews = await getCollection('reviews');
           <h2>Čo hovoria klienti</h2>
         </header>
         
-        {/* ŽIVÝ ASTRO CYKLUS PRE DYNAMICKÉ STRÁŽENIE RECENZIÍ */}
         <div class="testimonials-marquee fade-in" aria-label="Recenzie klientov">
           <div class="reviews-carousel">
             {allReviews.length === 0 && (
               <p class="section-note">Zatiaľ tu nie sú žiadne recenzie. Pridajte novú cez Keystatic admin panel!</p>
             )}
             
-            {allReviews.length > 0 && (
+            {approvedReviews.length > 0 && (
               <>
                 <button class="carousel-btn carousel-btn--prev" aria-label="Predchádzajúca recenzia" title="Predchádzajúca">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -332,7 +334,7 @@ const allReviews = await getCollection('reviews');
                 </button>
                 
                 <div class="carousel-indicators">
-                  {allReviews.map((_, index) => (
+                  {approvedReviews.map((_, index) => (
                     <button 
                       class={`indicator ${index === 0 ? 'is-active' : ''}`}
                       aria-label={`Recenzia ${index + 1}`}
@@ -341,7 +343,7 @@ const allReviews = await getCollection('reviews');
                   ))}
                 </div>
 
-                <script define:vars={{ reviewsCount: allReviews.length, reviews: allReviews }}>
+                <script define:vars={{ reviewsCount: approvedReviews.length, reviews: approvedReviews }}>
                   {
                     // Dáta recenzií sa prejavia v globálnom scope
                     window.allReviewsData = reviews;
@@ -397,7 +399,7 @@ const allReviews = await getCollection('reviews');
               <button class="button button-primary" type="submit">Poslať recenziu na schválenie</button>
               <p class="form-hint">Recenzie publikujeme až po overení klienta. Nepublikujú sa automaticky.</p>
             </div>
-            <p class="form-message review-form-message" aria-live="polite"></p>
+            <p class="form-message review-form-message" id="form-feedback" aria-live="polite"></p>
           </form>
         </article>
       </div>
@@ -417,5 +419,62 @@ const allReviews = await getCollection('reviews');
 
   <script>
     import '../scripts/main.js';
+
+    // OBLUHA FORMULÁRA NA RECENZIE
+    const reviewForm = document.getElementById('review-form');
+    const formFeedback = document.getElementById('form-feedback');
+
+    if (reviewForm) {
+      reviewForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (formFeedback) {
+          formFeedback.textContent = 'Odosielam recenziu...';
+          formFeedback.style.color = 'inherit';
+        }
+
+        // Zozbieranie dát z inputov formulára
+        const authorName = (document.getElementById('review-name') as HTMLInputElement).value;
+        const businessName = (document.getElementById('review-business') as HTMLInputElement).value;
+        const reviewTitle = `${authorName} - ${businessName}`; // Skombinuje Meno a Firmu ako Titulok recenzie
+        const ratingValue = (document.getElementById('review-rating') as HTMLSelectElement).value;
+        const messageValue = (document.getElementById('review-message') as HTMLTextAreaElement).value;
+
+        try {
+          // Posielame dáta zabalené do čistého JSONu
+          const response = await fetch('/api/review', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              title: reviewTitle,
+              author: authorName,
+              rating: ratingValue,
+              content: messageValue
+            })
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            if (formFeedback) {
+              formFeedback.textContent = '✅ Recenzia bola úspešne odoslaná na schválenie. Ďakujeme!';
+              formFeedback.style.color = '#4ade80';
+            }
+            reviewForm.reset(); // Vyčistíme formulár
+          } else {
+            throw new Error(result.error || 'Neznáma chyba na serveri');
+          }
+
+        } catch (error: any) {
+          console.error('Chyba pri odosielaní:', error);
+          if (formFeedback) {
+            formFeedback.textContent = `❌ Nepodarilo sa odoslať: ${error.message || 'Skontrolujte pripojenie'}`;
+            formFeedback.style.color = '#f87171';
+          }
+        }
+      });
+    }
   </script>
 </BaseLayout>
