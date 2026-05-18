@@ -1,6 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
+
+// Načítame všetky schválené recenzie z Keystaticu (priečinok src/content/reviews/)
+const allReviews = await getCollection('reviews');
 ---
 
 <BaseLayout
@@ -54,7 +58,7 @@ import '../styles/global.css';
       <div class="container fade-in">
         <p class="kicker">Esticode z Košíc</p>
         <h1>Tvoríme weby pre kaviarne a malé firmy na Slovensku</h1>
-        <p class="lead">Navrhujeme a kódujeme čisté, rýchle weby, ktoré pôsobia profesionálne a fungujú bez kompromisov na mobile aj desktope.</p>
+        <p class="lead">Navrhujeme and kódujeme čisté, rýchle weby, ktoré pôsobia profesionálne a fungujú bez kompromisov na mobile aj desktope.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#portfolio">Pozrieť portfólio</a>
           <a class="button button-outline" href="#kontakt">Kontaktovať nás</a>
@@ -171,7 +175,7 @@ import '../styles/global.css';
     <section class="section contact-section" id="kontakt">
       <div class="container">
         <header class="section-header fade-in">
-          <p class="kicker">Kontakt</p>
+          <p class="kicker">Contact</p>
           <h2>Poďme spolupracovať</h2>
         </header>
 
@@ -298,8 +302,25 @@ import '../styles/global.css';
           <p class="kicker">Recenzie</p>
           <h2>Čo hovoria klienti</h2>
         </header>
+        
+        {/* ŽIVÝ ASTRO CYKLUS PRE DYNAMICKÉ STRÁŽENIE RECENZIÍ */}
         <div class="testimonials-marquee fade-in" aria-label="Posuvne recenzie klientov">
-          <div class="testimonials-grid" id="reviews-list" aria-live="polite"></div>
+          <div class="testimonials-grid" style="display: flex; gap: 20px; flex-direction: column; margin-block-end: 40px;">
+            {allReviews.map((review) => (
+              <div class="review-card" style="border: 1px solid #333; padding: 20px; border-radius: 8px; background: rgba(255,255,255,0.03);">
+                <h3 style="margin: 0 0 5px 0; font-size: 1.25rem;">{review.data.title}</h3>
+                <p style="margin: 0 0 10px 0; color: #ffd700;">
+                  {"★".repeat(review.data.rating)}{"☆".repeat(5 - review.data.rating)}
+                </p>
+                <p style="margin: 0 0 10px 0; font-style: italic; opacity: 0.9;">"{review.body}"</p>
+                <p style="margin: 0; font-size: 0.85rem; opacity: 0.6;">— {review.data.author}</p>
+              </div>
+            ))}
+
+            {allReviews.length === 0 && (
+              <p class="section-note">Zatiaľ tu nie sú žiadne recenzie. Pridajte novú cez Keystatic admin panel!</p>
+            )}
+          </div>
         </div>
 
         <article class="review-submit fade-in" aria-labelledby="review-submit-title">
@@ -360,7 +381,7 @@ import '../styles/global.css';
         <a href="/ochrana-osobnych-udajov">Ochrana osobných údajov</a>
         <a href="/cookies">Cookies</a>
         <a href="/obchodne-podmienky">Obchodné podmienky</a>
-        <a href="/admin">Admin recenzií</a>
+        <a href="/keystatic">Admin recenzií</a>
       </nav>
     </div>
   </footer>
