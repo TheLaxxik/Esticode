@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Esticode | Admin recenzii</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-header">
+      <p class="admin-kicker">Esticode</p>
+      <h1>Admin recenzii</h1>
+      <p>Schvalovanie recenzii pred publikovanim na webe.</p>
+    </header>
+
+    <section class="admin-login" id="admin-login">
+      <h2>Prihlasenie</h2>
+      <p>Zadaj admin heslo pre pristup k schvalovaniu recenzii.</p>
+      <form id="admin-login-form" class="admin-form" aria-label="Admin login">
+        <label for="admin-password">Heslo</label>
+        <input id="admin-password" name="admin-password" type="password" autocomplete="current-password" required>
+        <button type="submit" class="button button-primary">Prihlasit</button>
+        <p id="admin-login-message" class="admin-message" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="admin-panel" id="admin-panel" hidden>
+      <div class="admin-toolbar">
+        <button type="button" class="button button-outline" id="admin-logout">Odhlasit</button>
+        <button type="button" class="button button-outline" id="admin-export">Export schvalenych</button>
+        <a class="button button-outline" href="index.html#recenzie">Spat na web</a>
+      </div>
+
+      <article class="admin-card">
+        <h2>Cakajuce recenzie</h2>
+        <p class="admin-hint">Recenzie su verejne az po schvaleni. Vzdy over klientsky kod projektu.</p>
+        <div id="pending-list" class="admin-list" aria-live="polite"></div>
+      </article>
+
+      <article class="admin-card">
+        <h2>Schvalene recenzie</h2>
+        <div id="approved-list" class="admin-list" aria-live="polite"></div>
+      </article>
+
+      <article class="admin-card admin-note">
+        <h2>Poznamka k bezpecnosti</h2>
+        <p>Tento admin je idealny na rychle nasadenie statickej stranky, ale heslo aj data su lokalne v prehliadaci. Pre produkciu odporucam backend s overenim identity a uloziskom mimo localStorage.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
