@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/404.css';
+---
+
+<BaseLayout title="Esticode | 404" description="Stránka nebola nájdená.">
+
+  <header class="site-header">
+    <nav class="container nav" aria-label="Hlavná navigácia">
+      <a class="logo" href="/" aria-label="Esticode domovská stránka">
+        <img src="/img/Logo_White.svg" alt="Esticode">
+      </a>
+    </nav>
+  </header>
+
+  <main class="error-main">
+    <section class="container error-shell fade-in">
+      <p class="error-code">404</p>
+      <h1>Táto stránka sa niekde stratila.</h1>
+      <p class="error-lead">Link môže byť neplatný alebo stránka už neexistuje. Vráťte sa na hlavnú stránku a pokračujte odtiaľ.</p>
+      <div class="error-actions">
+        <a class="button button-primary" href="/">Späť na domov</a>
+        <a class="button button-outline" href="/#kontakt">Kontaktovať Esticode</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    import '../scripts/main.js';
+  </script>
+</BaseLayout>
