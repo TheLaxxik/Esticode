@@ -23,6 +23,15 @@
   --transition-fast: 0.2s ease;
 }
 
+/* Center specific contact intro heading on mobile */
+@media (max-width: 47.99rem) {
+  .contact-intro h3 {
+    text-align: center;
+    margin-inline: auto;
+    max-inline-size: 20ch;
+  }
+}
+
 /* reset */
 * {
   box-sizing: border-box;
@@ -1516,5 +1525,65 @@ body.popup-open {
 
   .menu {
     transition: none;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 47.99rem) {
+  .reviews-carousel {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .carousel-btn {
+    inline-size: 2rem;
+    block-size: 2rem;
+  }
+  
+  .carousel-btn--prev {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: var(--space-2);
+    transform: translateY(-50%);
+  }
+  
+  .carousel-btn--next {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: var(--space-2);
+    transform: translateY(-50%);
+  }
+  
+  #current-review {
+    inline-size: 100%;
+    max-inline-size: 320px;
+  }
+  
+  .carousel-indicators {
+    margin-block-start: var(--space-2);
+    margin-block-end: 0;
+  }
+}
+
+/* Center delivery card text on mobile */
+@media (max-width: 47.99rem) {
+  .delivery-card,
+  .delivery-card h3,
+  .delivery-card p,
+  .delivery-label {
+    text-align: center;
+  }
+
+  .delivery-card {
+    inline-size: 100%;
+  }
+}
+
+/* Center FAQ questions and answers on mobile */
+@media (max-width: 47.99rem) {
+  .faq-item summary,
+  .faq-answer {
+    text-align: center;
   }
 }
