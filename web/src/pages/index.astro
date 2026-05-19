@@ -3,10 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 
-// Načítame všetky recenzie z Keystaticu (priečinok src/content/reviews/)
 const allReviews = await getCollection('reviews');
-
-// Filtrujeme iba schválené recenzie
 const approvedReviews = allReviews.filter(review => review.data.approved === true);
 ---
 
@@ -324,7 +321,10 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
                   <h3></h3>
                   <p class="stars"></p>
                   <p class="quote"></p>
-                  <p class="author"></p>
+                  <div class="author">
+                    <p class="author-name"></p>
+                    <p class="author-company"></p>
+                  </div>
                 </div>
                 
                 <button class="carousel-btn carousel-btn--next" aria-label="Ďalšia recenzia" title="Ďalšia">
@@ -345,7 +345,6 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
 
                 <script define:vars={{ reviewsCount: approvedReviews.length, reviews: approvedReviews }}>
                   {
-                    // Dáta recenzií sa prejavia v globálnom scope
                     window.allReviewsData = reviews;
                     window.currentReviewIndex = 0;
                   }
@@ -420,36 +419,40 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
   <script>
     import '../scripts/main.js';
 
-    // OBLUHA FORMULÁRA NA RECENZIE
+    // OBSLUHA FORMULÁRA NA RECENZIE
     const reviewForm = document.getElementById('review-form');
     const formFeedback = document.getElementById('form-feedback');
 
     if (reviewForm) {
       reviewForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
+        const submitBtn = reviewForm.querySelector('button[type="submit"]') as HTMLButtonElement;
+        submitBtn.disabled = true;
+
         if (formFeedback) {
           formFeedback.textContent = 'Odosielam recenziu...';
           formFeedback.style.color = 'inherit';
         }
 
-        // Zozbieranie dát z inputov formulára
         const authorName = (document.getElementById('review-name') as HTMLInputElement).value;
         const businessName = (document.getElementById('review-business') as HTMLInputElement).value;
-        const reviewTitle = `${authorName} - ${businessName}`; // Skombinuje Meno a Firmu ako Titulok recenzie
+        const emailValue = (document.getElementById('review-email') as HTMLInputElement).value;
+        const projectCode = (document.getElementById('review-project-code') as HTMLInputElement).value;
         const ratingValue = (document.getElementById('review-rating') as HTMLSelectElement).value;
         const messageValue = (document.getElementById('review-message') as HTMLTextAreaElement).value;
 
         try {
-          // Posielame dáta zabalené do čistého JSONu
           const response = await fetch('/api/review', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              title: reviewTitle,
               author: authorName,
+              companyName: businessName,
+              contactEmail: emailValue,
+              clientCode: projectCode,
               rating: ratingValue,
               content: messageValue
             })
@@ -462,7 +465,7 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
               formFeedback.textContent = '✅ Recenzia bola úspešne odoslaná na schválenie. Ďakujeme!';
               formFeedback.style.color = '#4ade80';
             }
-            reviewForm.reset(); // Vyčistíme formulár
+            reviewForm.reset();
           } else {
             throw new Error(result.error || 'Neznáma chyba na serveri');
           }
@@ -473,8 +476,11 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
             formFeedback.textContent = `❌ Nepodarilo sa odoslať: ${error.message || 'Skontrolujte pripojenie'}`;
             formFeedback.style.color = '#f87171';
           }
+        } finally {
+          submitBtn.disabled = false;
         }
-      });
+
+      }, { once: true });
     }
   </script>
 </BaseLayout>

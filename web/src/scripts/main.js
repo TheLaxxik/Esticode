@@ -513,7 +513,8 @@ function initReviewsCarousel() {
     const h3 = reviewCard.querySelector('h3');
     const starsP = reviewCard.querySelector('.stars');
     const quoteP = reviewCard.querySelector('.quote');
-    const authorP = reviewCard.querySelector('.author');
+    const authorName = reviewCard.querySelector('.author-name');
+    const authorCompany = reviewCard.querySelector('.author-company');
 
     // Remove previous animation classes
     reviewCard.classList.remove('animate-next', 'animate-prev');
@@ -525,10 +526,11 @@ function initReviewsCarousel() {
     reviewCard.classList.add(`animate-${direction}`);
 
     // Update content
-    h3.textContent = review.data.title;
+    h3.textContent = review.data.companyName || '';
     starsP.textContent = getStarsText(review.data.rating);
     quoteP.textContent = `"${review.body}"`;
-    authorP.textContent = `— ${review.data.author}`;
+    authorName.textContent = `— ${review.data.author}`;
+    authorCompany.textContent = review.data.companyName || '';
 
     // Update indicators
     indicators.forEach((indicator, idx) => {

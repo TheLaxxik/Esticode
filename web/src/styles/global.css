@@ -1010,9 +1010,26 @@ p {
 
 .review-card .author {
   margin: 0;
-  font-size: 0.9rem;
-  opacity: 0.7;
-  color: var(--color-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.review-card .author-name {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.review-card .author-company {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f7d27c;
+  opacity: 0.9;
 }
 
 /* Reviews Carousel */

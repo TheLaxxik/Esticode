@@ -7,13 +7,15 @@ export default config({
   collections: {
     reviews: collection({
       label: 'Recenzie',
-      slugField: 'title',
+      slugField: 'clientCode',
       path: 'src/content/reviews/*',
       format: { contentField: 'content' },
       schema: {
-        title: fields.slug({ name: { label: 'Titulok recenzie' } }),
-        rating: fields.integer({ label: 'Hodnotenie (1-5)', validation: { min: 1, max: 5 } }),
+        clientCode: fields.slug({ name: { label: 'Klientský kód' } }),
         author: fields.text({ label: 'Meno autora recenzie' }),
+        companyName: fields.text({ label: 'Názov firmy' }),
+        contactEmail: fields.text({ label: 'Kontaktný email' }),
+        rating: fields.integer({ label: 'Hodnotenie (1-5)', validation: { min: 1, max: 5 } }),
         content: fields.markdoc({ label: 'Obsah recenzie / Text' }),
         
         approved: fields.checkbox({

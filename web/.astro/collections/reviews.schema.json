@@ -2,16 +2,22 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
-    "title": {
+    "clientCode": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "contactEmail": {
       "type": "string"
     },
     "rating": {
       "type": "number",
       "minimum": 1,
       "maximum": 5
-    },
-    "author": {
-      "type": "string"
     },
     "approved": {
       "default": false,
@@ -22,8 +28,10 @@
     }
   },
   "required": [
-    "title",
-    "rating",
-    "author"
+    "clientCode",
+    "author",
+    "companyName",
+    "contactEmail",
+    "rating"
   ]
 }

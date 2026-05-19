@@ -18,9 +18,17 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const data = JSON.parse(rawBody);
-    const { title, author, rating, content } = data;
+    const { author, companyName, contactEmail, clientCode, rating, content } = data;
 
-    const fileSlug = title
+    // Validácia povinných polí
+    if (!clientCode || !author || !companyName || !contactEmail || !rating || !content) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Chýbajú povinné polia.' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const fileSlug = clientCode
       .toLowerCase()
       .trim()
       .normalize('NFD')
@@ -40,9 +48,11 @@ export const POST: APIRoute = async ({ request }) => {
     console.log('[review API] filePath:', filePath);
 
     const fileContent = `---
-title: ${title}
-rating: ${Number(rating)}
+clientCode: ${clientCode}
 author: ${author}
+companyName: ${companyName}
+contactEmail: ${contactEmail}
+rating: ${Number(rating)}
 approved: false
 ---
 
