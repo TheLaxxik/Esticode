@@ -526,11 +526,11 @@ function initReviewsCarousel() {
     reviewCard.classList.add(`animate-${direction}`);
 
     // Update content
-    h3.textContent = review.data.companyName || '';
+    h3.textContent = '';
     starsP.textContent = getStarsText(review.data.rating);
     quoteP.textContent = `"${review.body}"`;
     authorName.textContent = `— ${review.data.author}`;
-    authorCompany.textContent = review.data.companyName || '';
+    authorCompany.textContent = `${review.data.companyName || ''} - ${review.data.originalCode || ''}`;
 
     // Update indicators
     indicators.forEach((indicator, idx) => {

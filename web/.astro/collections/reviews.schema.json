@@ -2,13 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
-    "clientCode": {
-      "type": "string"
-    },
-    "author": {
+    "originalCode": {
       "type": "string"
     },
     "companyName": {
+      "type": "string"
+    },
+    "author": {
       "type": "string"
     },
     "contactEmail": {
@@ -28,9 +28,9 @@
     }
   },
   "required": [
-    "clientCode",
-    "author",
+    "originalCode",
     "companyName",
+    "author",
     "contactEmail",
     "rating"
   ]

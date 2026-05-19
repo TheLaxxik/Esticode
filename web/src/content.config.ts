@@ -5,9 +5,9 @@ const reviews = defineCollection({
   // Astro v6 potrebuje loader, ktorý nájde všetky .mdoc a .md súbory v zložke
   loader: glob({ pattern: '**/*.{md,mdoc}', base: './src/content/reviews' }),
   schema: z.object({
-    clientCode: z.string(),
-    author: z.string(),
+    originalCode: z.string(),
     companyName: z.string(),
+    author: z.string(),
     contactEmail: z.string(),
     rating: z.number().min(1).max(5),
     approved: z.boolean().default(false),
