@@ -7,14 +7,24 @@
       "createdAt": "2026-05-19"
     },
     "ESTI-4GFY-9AK6": {
-      "used": false,
+      "used": true,
       "type": "landing-page",
       "client": "asd",
-      "createdAt": "2026-05-19"
+      "createdAt": "2026-05-19",
+      "usedAt": "2026-05-19T21:06:08.970Z",
+      "usedBy": "opuisdhpgfd"
+    },
+    "ESTI-M7JA-HZYX": {
+      "used": true,
+      "type": "firemny-web",
+      "client": "Styleless",
+      "createdAt": "2026-05-19",
+      "usedAt": "2026-05-19T21:04:56.890Z",
+      "usedBy": "Styleless"
     }
   },
   "stats": {
-    "totalGenerated": 2,
-    "totalUsed": 0
+    "totalGenerated": 3,
+    "totalUsed": 2
   }
 }

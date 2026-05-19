@@ -13,6 +13,10 @@ export default config({
       schema: {
         originalCode: fields.slug({ name: { label: 'Klientský kód' } }),
         companyName: fields.text({ label: 'Názov firmy' }),
+        clientCode: fields.text({
+          label: 'K. Kód',
+          description: 'Klientský kód pridelený zákazníkovi (napr. ESTI-XXXX-XXXX)',
+        }),
         author: fields.text({ label: 'Meno autora recenzie' }),
         contactEmail: fields.text({ label: 'Kontaktný email' }),
         rating: fields.integer({ label: 'Hodnotenie (1-5)', validation: { min: 1, max: 5 } }),
@@ -36,6 +40,14 @@ export default config({
             label: 'Názov klienta',
             description: '⚠️ Kódy sa generujú na /admin/codes — kód skopíruj a vlož do poľa Slug vyššie.',
           }
+        }),
+        companyName: fields.text({
+          label: 'Názov firmy',
+          description: 'Oficiálny názov firmy klienta',
+        }),
+        clientCode: fields.text({
+          label: 'K. Kód',
+          description: 'Klientský kód pridelený zákazníkovi (napr. ESTI-XXXX-XXXX)',
         }),
         projectType: fields.select({
           label: 'Typ projektu',
