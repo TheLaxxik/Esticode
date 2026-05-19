@@ -1,6 +1,5 @@
-# Esticode — Projekt (Astro)
+# Esticode
 
-Krátky popis
 -----------------
 Jednoduchá webová stránka postavená pomocou Astro. Obsahuje základné stránky, layouty, skripty a štýly.
 

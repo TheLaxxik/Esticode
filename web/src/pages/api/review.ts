@@ -1,40 +1,44 @@
+export const prerender = false;
+
 import type { APIRoute } from 'astro';
-// @ts-ignore
 import fs from 'node:fs/promises';
-// @ts-ignore
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    // Čítanie JSON dát z požiadavky
-    const data = await request.json();
-    const { title, author, rating, content } = data;
-
-    // Validácia povinných polí
-    if (!title || !author || !rating || !content) {
+    const rawBody = await request.text();
+    console.log('[review API] raw body:', rawBody);
+    
+    if (!rawBody) {
       return new Response(
-        JSON.stringify({ success: false, error: 'Chýbajú povinné údaje.' }),
+        JSON.stringify({ success: false, error: 'Prázdny request body.' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    // Vygenerovanie bezpečného názvu súboru zo slugu (Titulku)
+    const data = JSON.parse(rawBody);
+    const { title, author, rating, content } = data;
+
     const fileSlug = title
       .toLowerCase()
       .trim()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // Odstránenie diakritiky
-      .replace(/[^a-z0-9]+/g, '-')     // Nahradenie nealfanumerických znakov pomlčkou
-      .replace(/^-+|-+$/g, '');        // Orezanie pomlčiek z krajov
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
 
     const fileName = `${fileSlug}.mdoc`;
-    
-    // @ts-ignore
-    const rootDir = process.cwd();
+
+    // Toto spolahlivo ukazuje na web/ priecinok bez ohladu na cwd
+    const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
     const targetDir = path.join(rootDir, 'src', 'content', 'reviews');
     const filePath = path.join(targetDir, fileName);
 
-    // Vytvorenie štruktúry Markdoc súboru pre Keystatic s approved: false
+    console.log('[review API] rootDir:', rootDir);
+    console.log('[review API] targetDir:', targetDir);
+    console.log('[review API] filePath:', filePath);
+
     const fileContent = `---
 title: ${title}
 rating: ${Number(rating)}
@@ -44,7 +48,6 @@ approved: false
 
 ${content}`;
 
-    // Uistenie sa, že priečinok existuje a zápis súboru
     await fs.mkdir(targetDir, { recursive: true });
     await fs.writeFile(filePath, fileContent, 'utf-8');
 
@@ -54,7 +57,7 @@ ${content}`;
     );
 
   } catch (error: any) {
-    console.error('Chyba na backend API:', error);
+    console.error('[review API] Chyba:', error);
     return new Response(
       JSON.stringify({ success: false, error: 'Chyba na serveri pri ukladaní recenzie.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
