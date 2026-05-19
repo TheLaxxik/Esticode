@@ -530,7 +530,7 @@ function initReviewsCarousel() {
     starsP.textContent = getStarsText(review.data.rating);
     quoteP.textContent = `"${review.body}"`;
     authorName.textContent = `— ${review.data.author}`;
-    authorCompany.textContent = `${review.data.companyName || ''} - ${review.data.originalCode || ''}`;
+    authorCompany.textContent = `${review.data.companyName || ''}`;
 
     // Update indicators
     indicators.forEach((indicator, idx) => {

@@ -26,9 +26,8 @@ export const POST: APIRoute = async ({ request }) => {
       const raw = await fs.readFile(codesPath, 'utf-8');
       codesData = JSON.parse(raw);
     } catch (e) {
-      console.error('Error reading or parsing codes.json:', e);
       return new Response(
-        JSON.stringify({ success: false, error: 'Interná chyba servera pri čítaní kódov.' }),
+        JSON.stringify({ success: false, error: 'Interná chyba servera.' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -36,16 +35,9 @@ export const POST: APIRoute = async ({ request }) => {
     const codeEntry = codesData.codes[clientCode];
 
     // Overenie kódu
-    if (!codeEntry) {
+    if (!codeEntry || codeEntry.used) {
       return new Response(
-        JSON.stringify({ success: false, error: 'Neplatný klientsky kód.' }),
-        { status: 403, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    if (codeEntry.used) {
-      return new Response(
-        JSON.stringify({ success: false, error: 'Tento kód bol už použitý.' }),
+        JSON.stringify({ success: false, error: 'Neplatný alebo už použitý klientsky kód.' }),
         { status: 403, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -58,29 +50,30 @@ export const POST: APIRoute = async ({ request }) => {
 
     await fs.writeFile(codesPath, JSON.stringify(codesData, null, 2), 'utf-8');
 
-    // Uloženie recenzie
-    const fileSlug = companyName
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/^-+|-+$/g, '');
-
+    // Názov súboru pre recenziu
+    const fileSlug = clientCode.toUpperCase().trim().replace(/[^A-Z0-9-]/g, '');
     const fileName = `${fileSlug}.mdoc`;
     const targetDir = path.join(rootDir, 'src', 'content', 'reviews');
     const filePath = path.join(targetDir, fileName);
 
+    // TOTO JE TÁ OPRAVA: Presný formát času pre Keystatic (napr. "2026-05-19T23:38")
+    const now = new Date();
+    const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    // Vygenerovanie .mdoc obsahu
     const reviewContent = `---
-originalCode: "${clientCode}"
-companyName: "${companyName}"
-clientCode: "${clientCode}"
-author: "${author}"
-contactEmail: "${contactEmail}"
-rating: ${rating}
+originalCode: ${JSON.stringify(clientCode)}
+companyName: ${JSON.stringify(companyName)}
+clientCode: ${JSON.stringify(clientCode)}
+author: ${JSON.stringify(author)}
+contactEmail: ${JSON.stringify(contactEmail)}
+rating: ${Number(rating)}
+createdAt: '${formattedDate}'
 approved: false
 ---
 ${content}
 `;
+
     await fs.mkdir(targetDir, { recursive: true });
     await fs.writeFile(filePath, reviewContent, 'utf-8');
 
@@ -89,9 +82,8 @@ ${content}
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
-    console.error('Chyba na serveri pri ukladaní recenzie:', error);
     return new Response(
-      JSON.stringify({ success: false, error: 'Chyba na serveri pri ukladaní recenzie.' }),
+      JSON.stringify({ success: false, error: 'Chyba na serveri.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
