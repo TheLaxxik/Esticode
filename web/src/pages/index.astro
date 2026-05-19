@@ -9,7 +9,7 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
 
 <BaseLayout
   title="Esticode | Weby pre kaviarne a malé firmy"
-  description="Esticode z Košíc tvorí rýchle a čisté weby pre kaviarne a malé firmy. Jasná komunikácia, dôveryhodný dizajn a dodanie do 2-3 týždňov podľa rozsahu."
+  description="Esticode tvorí rýchle a čisté weby pre kaviarne a malé firmy. Jasná komunikácia, dôveryhodný dizajn a dodanie do 2-3 týždňov podľa rozsahu."
   ogTitle="Esticode | Weby pre kaviarne a malé firmy"
   ogDescription="Rýchle a čisté weby z Košíc s dôrazom na dôveru, mobilný zážitok a jasné výsledky."
 >
@@ -56,7 +56,6 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
   <main>
     <section class="section hero" id="hero">
       <div class="container fade-in">
-        <p class="kicker">Esticode z Košíc</p>
         <h1>Tvoríme weby pre kaviarne a malé firmy na Slovensku</h1>
         <p class="lead">Navrhujeme and kódujeme čisté, rýchle weby, ktoré pôsoatia profesionálne a fungujú bez kompromisov na mobile aj desktope.</p>
         <div class="hero-actions">
@@ -435,6 +434,7 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
           formFeedback.style.color = 'inherit';
         }
 
+        // Načítanie hodnôt z formulára
         const authorName = (document.getElementById('review-name') as HTMLInputElement).value;
         const businessName = (document.getElementById('review-business') as HTMLInputElement).value;
         const emailValue = (document.getElementById('review-email') as HTMLInputElement).value;
@@ -448,13 +448,14 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
             headers: {
               'Content-Type': 'application/json'
             },
+            // Posielame čisté a presne pomenované kľúče pre backend
             body: JSON.stringify({
               author: authorName,
-              companyName: businessName,
-              contactEmail: emailValue,
-              clientCode: projectCode,
+              business: businessName,
+              email: emailValue,
+              projectCode: projectCode,
               rating: ratingValue,
-              content: messageValue
+              message: messageValue
             })
           });
 
@@ -479,8 +480,7 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
         } finally {
           submitBtn.disabled = false;
         }
-
-      }, { once: true });
+      });
     }
   </script>
 </BaseLayout>
