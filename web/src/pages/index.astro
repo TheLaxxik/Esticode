@@ -153,6 +153,13 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
             <p>Nasadenie jednoduchého CMS (Keystatic / Netlify). Ceny, denné menu alebo fotogalériu si na webe zmeníte sami za 2 minúty priamo z mobilu.</p>
             <p class="addon-price">Cena <span>individuálne</span></p>
           </article>
+
+          <article class="addon-card fade-in">
+            <div class="addon-label">Správa</div>
+            <h3>Pravidelná správa webu</h3>
+            <p>Priebežné aktualizácie obsahu, drobné úpravy textov, výmenu fotiek a technickú kontrolu webu vieme riešiť aj mesačne podľa potreby.</p>
+            <p class="addon-price">Cena <span>50 € mesačne</span></p>
+          </article>
         </div>
       </div>
     </section>
@@ -251,25 +258,26 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
               </div>
               <div>
                 <label for="rozpocet">Rozpočet</label>
-                <select id="rozpocet" name="rozpocet">
-                  <option value="" selected>Približný rozpočet</option>
-                  <option value="do-300">Do 300 €</option>
-                  <option value="300-600">300 - 600 €</option>
-                  <option value="600-1000">600 - 1 000 €</option>
-                  <option value="neviem">Ešte neviem</option>
-                </select>
+                  <select name="rozpocet" required ...>
+                    <option value="" disabled selected>Približný rozpočet</option>
+                    <option value="do-600">Do 600 €</option>
+                    <option value="600-1000">600 € – 1 000 €</option>
+                    <option value="1000-2000">1 000 € – 2 000 €</option>
+                    <option value="viac-ako-2000">Viac ako 2 000 €</option>
+                    <option value="neviem">Ešte neviem / Neurčený</option>
+                  </select>
               </div>
             </div>
 
             <div class="form-row">
               <div>
                 <label for="termin">Kedy chcete spustiť web</label>
-                <select id="termin" name="termin">
-                  <option value="" selected>Vyberte termín</option>
-                  <option value="do-tyzdna">Čo najskôr</option>
-                  <option value="2-3-tyzdne">Do 2 - 3 týždňov</option>
-                  <option value="mesiac">Približne do mesiaca</option>
-                  <option value="len-info">Zbieram informácie</option>
+                <select id="termin" name="termin" required>
+                  <option value="" disabled selected>Kedy chcete spustiť web?</option>
+                  <option value="asap">Čo najskôr (expresne do 2 - 3 týždňov)</option>
+                  <option value="do-mesiaca">Približne do mesiaca</option>
+                  <option value="flexibilne">Netlačí ma čas (1 až 2 mesiace)</option>
+                  <option value="informacie">Zatiaľ iba zbieram informácie</option>
                 </select>
               </div>
               <div>
