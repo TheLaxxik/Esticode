@@ -8,9 +8,9 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
 ---
 
 <BaseLayout
-  title="Esticode | Weby pre kaviarne a malé firmy"
+  title="Esticode | Tvorba moderných webov"
   description="Esticode tvorí rýchle a čisté weby pre kaviarne a malé firmy. Jasná komunikácia, dôveryhodný dizajn a dodanie do 2-3 týždňov podľa rozsahu."
-  ogTitle="Esticode | Weby pre kaviarne a malé firmy"
+  ogTitle="Esticode | Tvorba moderných webov"
   ogDescription="Rýchle a čisté weby z Košíc s dôrazom na dôveru, mobilný zážitok a jasné výsledky."
 >
   <Fragment slot="head">
@@ -93,9 +93,8 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
             <p class="price">od 200 €</p>
           </article>
         </div>
+      </div>
     </section>
-
-    
 
     <section class="section delivery-section" id="dodanie">
       <div class="container">
@@ -182,7 +181,7 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
           <article class="project fade-in">
             <div class="project-image" aria-label="Náhľad pripravovaného projektu">Náhľad projektu</div>
             <h3>Lokálne Bistro</h3>
-            <p>Pripravovaný web pre malé bistro s prehľadnou ponukou, základným SEO a dôrazom na mobilný zážitok.</p>
+            <p>Pripravovaný web pre malé bistro s prehľadnou ponukou, základným SEO and dôrazom na mobilný zážitok.</p>
             <a href="#kontakt">Zobraziť →</a>
           </article>
         </div>
@@ -194,7 +193,7 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
         <div class="about-mark fade-in" aria-hidden="true">ES</div>
         <article class="about-content fade-in">
           <p class="kicker">Prečo Esticode</p>
-          <h2>Lokálny prístup, rýchla odozva a weby, ktoré nepôsobia lacno</h2>
+          <h2>Lokálny prístup, rýchla odozva a weby, ktoré nepôsoatia lacno</h2>
           <p>Ak niekto hľadá jednoduchú spoluprácu, rýchly štart a web, ktorý vyzerá profesionálne aj na mobile, práve tu vzniká najväčšia výhoda. Nepredávame len dizajn, ale celé riešenie, ktoré má zmysel pre malý biznis.</p>
         </article>
         <div class="why-points fade-in" aria-label="Dôvody spolupráce so službou Esticode">
@@ -239,7 +238,7 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
             </div>
           </article>
 
-          <form class="contact-form" aria-label="Kontaktný formulár">
+          <form class="contact-form" name="kontakt" method="POST" data-netlify="true" aria-label="Kontaktný formulár">
             <div class="form-row">
               <div>
                 <label for="meno">Meno</label>
@@ -258,14 +257,14 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
               </div>
               <div>
                 <label for="rozpocet">Rozpočet</label>
-                  <select name="rozpocet" required ...>
-                    <option value="" disabled selected>Približný rozpočet</option>
-                    <option value="do-600">Do 600 €</option>
-                    <option value="600-1000">600 € – 1 000 €</option>
-                    <option value="1000-2000">1 000 € – 2 000 €</option>
-                    <option value="viac-ako-2000">Viac ako 2 000 €</option>
-                    <option value="neviem">Ešte neviem / Neurčený</option>
-                  </select>
+                <select id="rozpocet" name="rozpocet" required>
+                  <option value="" disabled selected>Približný rozpočet</option>
+                  <option value="do-600">Do 600 €</option>
+                  <option value="600-1000">600 € – 1 000 €</option>
+                  <option value="1000-2000">1 000 € – 2 000 €</option>
+                  <option value="viac-ako-2000">Viac ako 2 000 €</option>
+                  <option value="neviem">Ešte neviem / Neurčený</option>
+                </select>
               </div>
             </div>
 
@@ -428,9 +427,9 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
             <select id="review-rating" name="review-rating" required>
               <option value="" selected disabled>Vyberte hodnotenie</option>
               <option value="5">★★★★★ (5 hviezdiciek)</option>
-              <option value="4">★★★★☆ (4 hviezdicky)</option>
-              <option value="3">★★★☆☆ (3 hviezdicky)</option>
-              <option value="2">★★☆☆☆ (2 hviezdicky)</option>
+              <option value="4">★★★★☆ (4 hviezdiky)</option>
+              <option value="3">★★★☆☆ (3 hviezdiky)</option>
+              <option value="2">★★☆☆☆ (2 hviezdiky)</option>
               <option value="1">★☆☆☆☆ (1 hviezdicka)</option>
             </select>
 
@@ -492,7 +491,6 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
             headers: {
               'Content-Type': 'application/json'
             },
-            // Posielame čisté a presne pomenované kľúče pre backend
             body: JSON.stringify({
               author: authorName,
               business: businessName,
