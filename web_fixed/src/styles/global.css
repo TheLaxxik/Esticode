@@ -583,23 +583,49 @@ p {
   display: grid;
   gap: var(--space-6);
   text-align: center;
+  max-inline-size: 72rem;
+  margin-inline: auto;
+}
+
+.why-header {
+  margin-block-end: var(--space-4);
 }
 
 .why-points {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--space-4);
+  justify-items: stretch;
+}
+
+@supports (display: grid) {
+  .why-points {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.why-point {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.why-point-icon {
+  inline-size: 3rem;
+  block-size: 3rem;
+  margin-block-end: var(--space-3);
+  color: #9df8ff;
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.why-point:hover .why-point-icon {
+  transform: scale(1.1) translateY(-2px);
+  filter: drop-shadow(0 0 12px rgba(157, 248, 255, 0.5));
 }
 
 .why-point h3 {
   margin-block-end: var(--space-2);
-}
-
-.why-point {
-  inline-size: min(100%, 20.5rem);
-  text-align: center;
 }
 
 .faq-item {
@@ -798,32 +824,20 @@ p {
   font-weight: 600;
 }
 
-.about-grid {
-  display: grid;
-  gap: var(--space-6);
-  text-align: center;
+.why-header {
+  margin-block-end: var(--space-2);
 }
 
-.about-mark {
-  font-size: clamp(3rem, 12vw, 8rem);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.05em;
-  background: linear-gradient(135deg, #9df8ff 0%, #ffffff 42%, #ffe799 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.about-content p:last-child {
+.why-header p:last-child {
   color: var(--color-muted);
   margin-block-start: var(--space-4);
-  max-inline-size: 45rem;
+  max-inline-size: 50rem;
   margin-inline: auto;
 }
 
-.why-grid .about-content p:last-child {
+.why-grid .why-header p:last-child {
   margin-block-start: var(--space-4);
+  text-align: center;
 }
 
 .contact-section {
@@ -1479,14 +1493,8 @@ body.popup-open {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .why-grid {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    align-items: center;
-    text-align: center;
-  }
-
-  .why-grid .about-mark {
-    grid-row: span 2;
+  .why-points {
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .section-note {
