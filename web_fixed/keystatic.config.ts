@@ -78,5 +78,41 @@ export default config({
         }),
       },
     }),
+
+    projects: collection({
+      label: 'Portfólio projekty',
+      slugField: 'title',
+      path: 'src/content/projects/*',
+      format: { data: 'json' },
+      columns: ['title', 'type', 'demo', 'published'],
+      schema: {
+        title: fields.slug({ name: { label: 'Názov projektu' } }),
+        type: fields.select({
+          label: 'Typ projektu',
+          options: [
+            { label: 'Landing page', value: 'landing-page' },
+            { label: 'Firemný web', value: 'firemny-web' },
+            { label: 'Redizajn', value: 'redizajn' },
+          ],
+          defaultValue: 'landing-page',
+        }),
+        description: fields.text({ label: 'Popis projektu', multiline: true }),
+        image: fields.image({
+          label: 'Náhľadový obrázok',
+          directory: 'public/img/portfolio',
+          publicPath: '/img/portfolio/',
+        }),
+        url: fields.url({ label: 'Link na živú stránku' }),
+        demo: fields.checkbox({
+          label: 'Demo projekt',
+          description: 'Zaškrtni ak ide o ukážkový projekt, nie reálneho klienta.',
+          defaultValue: true,
+        }),
+        published: fields.checkbox({
+          label: 'Zobraziť na webe',
+          defaultValue: true,
+        }),
+      },
+    }),
   },
 });

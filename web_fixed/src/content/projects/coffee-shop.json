@@ -1,0 +1,9 @@
+{
+  "title": "Coffee Shop",
+  "type": "firemny-web",
+  "description": "Prezentačný web pre kaviareň s čistou typografiou, dôrazom na menu a kontaktné CTA prvky.",
+  "image": "/img/portfolio/coffee-shop/image.png",
+  "url": "https://coffeeshop.esticode.sk",
+  "demo": true,
+  "published": true
+}

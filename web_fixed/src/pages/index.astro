@@ -5,6 +5,8 @@ import { getCollection } from 'astro:content';
 
 const allReviews = await getCollection('reviews');
 const approvedReviews = allReviews.filter(review => review.data.approved === true);
+const allProjects = await getCollection('projects');
+const publishedProjects = allProjects.filter(p => p.data.published === true);
 ---
 
 <BaseLayout
@@ -169,22 +171,47 @@ const approvedReviews = allReviews.filter(review => review.data.approved === tru
           <p class="kicker">Portfólio</p>
           <h2>Vybrané projekty</h2>
         </header>
-        <div class="portfolio-grid">
-          <article class="project fade-in">
-            <div class="project-image">
-              <img src="/img/CoffeeShop_Preview.png" alt="Náhľad projektu CoffeeShop Demo">
-            </div>
-            <h3>CoffeeShop Demo</h3>
-            <p>Prezentačný web pre kaviareň s čistou typografiou, dôrazom na menu a kontaktné CTA prvky.</p>
-            <a href="https://ivandvorovy.github.io/CoffeeShopDemo-web/" target="_blank" rel="noopener noreferrer">Zobraziť →</a>
-          </article>
-          <article class="project fade-in">
-            <div class="project-image" aria-label="Náhľad pripravovaného projektu">Náhľad projektu</div>
-            <h3>Lokálne Bistro</h3>
-            <p>Pripravovaný web pre malé bistro s prehľadnou ponukou, základným SEO and dôrazom na mobilný zážitok.</p>
-            <a href="#kontakt">Zobraziť →</a>
-          </article>
-        </div>
+        {publishedProjects.length === 0 ? (
+          <div class="portfolio-grid">
+            <article class="project fade-in">
+              <div class="project-image">
+                <img src="/img/CoffeeShop_Preview.png" alt="Náhľad projektu CoffeeShop Demo">
+              </div>
+              <div class="project-content">
+                <span class="project-tag">Landing page</span>
+                <h3>CoffeeShop Demo</h3>
+                <p>Prezentačný web pre kaviareň s čistou typografiou, dôrazom na menu a kontaktné CTA prvky.</p>
+                <a href="https://ivandvorovy.github.io/CoffeeShopDemo-web/" target="_blank" rel="noopener noreferrer">Zobraziť →</a>
+              </div>
+            </article>
+          </div>
+        ) : (
+          <div class="portfolio-grid">
+            {publishedProjects.map(project => (
+              <article class="project fade-in">
+                {project.data.image ? (
+                  <div class="project-image">
+                    <img src={project.data.image} alt={`Náhľad projektu ${project.data.title}`}>
+                  </div>
+                ) : (
+                  <div class="project-image project-image--empty">Náhľad projektu</div>
+                )}
+                <div class="project-content">
+                  <span class="project-tag">{
+                    project.data.type === 'landing-page' ? 'Landing page' :
+                    project.data.type === 'firemny-web' ? 'Firemný web' : 'Redizajn'
+                  }</span>
+                  {project.data.demo && <span class="project-tag project-tag--demo">Demo</span>}
+                  <h3>{project.data.title}</h3>
+                  <p>{project.data.description}</p>
+                  {project.data.url && (
+                    <a href={project.data.url} target="_blank" rel="noopener noreferrer">Zobraziť →</a>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
 

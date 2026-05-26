@@ -14,4 +14,17 @@ const reviews = defineCollection({
   }),
 });
 
-export const collections = { reviews };
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/projects' }),
+  schema: z.object({
+    title: z.string(),
+    type: z.enum(['landing-page', 'firemny-web', 'redizajn']),
+    description: z.string().optional(),
+    image: z.string().optional(),
+    url: z.string().optional(),
+    demo: z.boolean().default(true),
+    published: z.boolean().default(true),
+  }),
+});
+
+export const collections = { reviews, projects };
