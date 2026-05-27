@@ -598,12 +598,6 @@ p {
   justify-items: stretch;
 }
 
-@supports (display: grid) {
-  .why-points {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .why-point {
   text-align: center;
   display: flex;
@@ -1484,6 +1478,28 @@ body.popup-open {
     gap: 0.75rem;
   }
 
+  .why-grid {
+    gap: var(--space-4);
+  }
+
+  .why-header {
+    margin-block-end: var(--space-2);
+  }
+
+  .why-points {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .why-point {
+    padding: var(--space-4);
+  }
+
+  .why-point-icon {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+  }
+
   .logo img {
     block-size: 1.5rem;
     max-inline-size: 9.8rem;
@@ -1516,6 +1532,12 @@ body.popup-open {
 
   .why-points {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  @supports (display: grid) {
+    .why-points {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   .section-note {
