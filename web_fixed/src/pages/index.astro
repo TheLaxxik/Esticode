@@ -138,28 +138,28 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
             <div class="addon-label">Obsah</div>
             <h3>Copywriting</h3>
             <p>Nemáte čas písať texty? Dodajte nám základné podklady a my kompletne napíšeme pútavé texty na celý web za vás.</p>
-            <p class="addon-price">Cena <span>individuálne</span></p>
+            <p class="addon-price">Cena <span>od 100 € / web</span></p>
           </article>
 
           <article class="addon-card fade-in">
             <div class="addon-label">Google</div>
-            <h3>Pokročilé SEO</h3>
-            <p>Základné SEO robíme ku každému webu automaticky. Pri pokročilom spravíme hĺbkovú analýzu, aby vás zákazníci našli na popredných miestach.</p>
-            <p class="addon-price">Cena <span>individuálne</span></p>
+            <h3>Prémiový technický SEO & Speed balíček</h3>
+            <p>Základné SEO robíme ku každému webu automaticky. Tento balíček pridáva technický audit, optimalizáciu rýchlosti a doladenie štruktúry pre lepšiu viditeľnosť aj výkon webu.</p>
+            <p class="addon-price">Cena <span>od 150 €</span></p>
           </article>
 
           <article class="addon-card fade-in">
             <div class="addon-label">Backend</div>
             <h3>Admin rozhranie</h3>
             <p>Nasadenie jednoduchého CMS (Keystatic / Netlify). Ceny, denné menu alebo fotogalériu si na webe zmeníte sami za 2 minúty priamo z mobilu.</p>
-            <p class="addon-price">Cena <span>individuálne</span></p>
+            <p class="addon-price">Cena <span>od 150 €</span></p>
           </article>
 
           <article class="addon-card fade-in">
             <div class="addon-label">Správa</div>
             <h3>Pravidelná správa webu</h3>
             <p>Priebežné aktualizácie obsahu, drobné úpravy textov, výmenu fotiek a technickú kontrolu webu vieme riešiť aj mesačne podľa potreby.</p>
-            <p class="addon-price">Cena <span>50 € mesačne</span></p>
+            <p class="addon-price">Cena <span>od 50 € / mesiac</span></p>
           </article>
         </div>
       </div>
@@ -563,7 +563,7 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
     }
 
     // === OBSLUHA FORMULÁRA NA RECENZIE ===
-    const reviewForm = document.getElementById('review-form');
+    const reviewForm = document.getElementById('review-form') as HTMLFormElement | null;
     const formFeedback = document.getElementById('form-feedback');
 
     if (reviewForm) {
