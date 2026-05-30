@@ -2,7 +2,7 @@
   "slug": "TaskFlow AI",
   "title": "TaskFlow AI",
   "type": "landing-page",
-  "description": "TaskFlow AI – SaaS Landing Page\nModerná landing page pre fiktívny AI projektový nástroj zameraný na produktové tímy. Stránka obsahuje hero sekciu s live UI mockupom, prehľad funkcií, transparentný cenník s mesačným/ročným prepínačom a FAQ sekciu. Dôraz bol kladený na dôveryhodnosť SaaS produktu a konverziu návštevníka na registráciu.",
+  "description": "Landing page pre SaaS AI nástroj s hero mockupom, cenníckom a FAQ sekciou.",
   "image": "/img/portfolio/task-flow-ai/image.png",
   "url": "https://taskflow.esticode.sk/",
   "demo": true,
