@@ -83,12 +83,13 @@ export default config({
 
     projects: collection({
       label: 'Portfólio projekty',
-      slugField: 'title',
+      slugField: 'slug',
       path: 'src/content/projects/*',
       format: { data: 'json' },
-      columns: ['title', 'type', 'demo', 'published'],
+      columns: ['slug', 'title', 'type', 'demo', 'published'],
       schema: {
-        title: fields.slug({ name: { label: 'Názov projektu' } }),
+        slug: fields.slug({ name: { label: 'Slug projektu' } }),
+        title: fields.text({ label: 'Názov projektu' }),
         type: fields.select({
           label: 'Typ projektu',
           options: [

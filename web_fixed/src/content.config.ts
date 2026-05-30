@@ -17,6 +17,7 @@ const reviews = defineCollection({
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/projects' }),
   schema: z.object({
+    slug: z.string(),
     title: z.string(),
     type: z.enum(['landing-page', 'firemny-web', 'redizajn']),
     description: z.string().optional(),
