@@ -1,0 +1,10 @@
+{
+  "slug": "Electric Shop",
+  "title": "Electric Shop",
+  "type": "firemny-web",
+  "description": "Webová stránka pre elektrikára – Elektro Novák\nModerná prezentačná stránka pre certifikovaného elektrikára z Košíc. Web obsahuje prehľad služieb s cenníkom, sekciu s dôvodmi prečo si vybrať práve tohto dodávateľa, a kontaktnú stránku. Dôraz bol kladený na dôveryhodnosť a konverziu — hlavná výzva na akciu smeruje na nezáväznú cenovú ponuku. Stránka podporuje tmavý aj svetlý režim a je plne responzívna.\nTechnológie: Astro, HTML, CSS, JavaScript\nTyp: Demo projekt / firemný web",
+  "image": "/img/portfolio/electric-shop/image.png",
+  "url": "electricshop.esticode.sk",
+  "demo": true,
+  "published": true
+}
