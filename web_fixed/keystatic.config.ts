@@ -10,12 +10,9 @@ export default config({
     reviews: collection({
       label: 'Recenzie',
       slugField: 'originalCode',
-      path: 'src/content/reviews/*',
+      path: 'web_fixed/src/content/reviews/*',
       format: { contentField: 'content' },
-      
-      // Stĺpce, ktoré uvidíš v zozname recenzií
       columns: ['originalCode', 'companyName', 'rating', 'createdAt', 'approved'],
-      
       schema: {
         originalCode: fields.slug({ name: { label: 'Klientský kód' } }),
         companyName: fields.text({ label: 'Názov firmy' }),
@@ -39,12 +36,9 @@ export default config({
     clientCodes: collection({
       label: 'Klientske kódy',
       slugField: 'client',
-      path: 'src/content/client-codes/*',
+      path: 'web_fixed/src/content/client-codes/*',
       format: { data: 'json' },
-      
-      // Pridané 'createdAt' aj do zoznamu stĺpcov pre kódy
       columns: ['client', 'companyName', 'projectType', 'used', 'createdAt'],
-      
       schema: {
         client: fields.slug({
           name: {
@@ -74,7 +68,6 @@ export default config({
           description: 'Kód bol už použitý na odoslanie recenzie.',
           defaultValue: false,
         }),
-        // FIX: Keystatic už vie prečítať dátum vytvorenia klientskeho kódu
         createdAt: fields.datetime({
           label: 'Dátum vytvorenia',
         }),
@@ -84,7 +77,7 @@ export default config({
     projects: collection({
       label: 'Portfólio projekty',
       slugField: 'slug',
-      path: 'src/content/projects/*',
+      path: 'web_fixed/src/content/projects/*',
       format: { data: 'json' },
       columns: ['slug', 'title', 'type', 'demo', 'published'],
       schema: {
@@ -102,7 +95,7 @@ export default config({
         description: fields.text({ label: 'Popis projektu', multiline: true }),
         image: fields.image({
           label: 'Náhľadový obrázok',
-          directory: 'public/img/portfolio',
+          directory: 'web_fixed/public/img/portfolio',
           publicPath: '/img/portfolio/',
         }),
         url: fields.url({ label: 'Link na živú stránku' }),
