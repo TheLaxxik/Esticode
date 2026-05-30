@@ -4,7 +4,6 @@ export default config({
   storage: {
     kind: 'github',
     repo: 'TheLaxxik/Esticode',
-    branchPrefix: 'keystatic/',
   },
   collections: {
     reviews: collection({
