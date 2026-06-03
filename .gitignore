@@ -1,0 +1,10 @@
+node_modules
+dist
+
+# Local Netlify folder
+.netlify
+
+# Environment variables - NIKDY nekomitnúť do gitu!
+.env
+.env.local
+.env.*.local

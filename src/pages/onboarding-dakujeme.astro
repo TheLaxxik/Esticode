@@ -1,0 +1,81 @@
+---
+// src/pages/onboarding-dakujeme.astro
+---
+
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ďakujeme — Esticode</title>
+    <link rel="icon" type="image/svg+xml" href="/img/PFP_White.svg">
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background-color: #0f0f1a;
+        color: #e0e0e0;
+        font-family: 'Inter', sans-serif;
+        min-block-size: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+      }
+
+      .container {
+        text-align: center;
+        max-inline-size: 500px;
+      }
+
+      .icon {
+        font-size: 56px;
+        margin-block-end: 24px;
+      }
+
+      .label {
+        font-size: 12px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #00e5a0;
+        margin-block-end: 16px;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #ffffff;
+        margin-block-end: 16px;
+      }
+
+      p {
+        font-size: 15px;
+        color: #888;
+        line-height: 1.7;
+        margin-block-end: 32px;
+      }
+
+      .btn {
+        display: inline-block;
+        background: #00e5a0;
+        color: #0f0f1a;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 32px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: opacity 0.2s;
+      }
+
+      .btn:hover { opacity: 0.85; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="icon">✅</div>
+      <p class="label">Esticode</p>
+      <h1>Ďakujeme!</h1>
+      <p>Váš dotazník sme prijali. Ozveme sa vám do <strong style="color:#fff">24 hodín</strong> s ďalšími krokmi.</p>
+      <a href="/" class="btn">Späť na hlavnú stránku</a>
+    </div>
+  </body>
+</html>

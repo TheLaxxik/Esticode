@@ -1,0 +1,10 @@
+{
+  "slug": "TaskFlow AI",
+  "title": "TaskFlow AI",
+  "type": "landing-page",
+  "description": "Landing page pre SaaS AI nástroj s hero mockupom, cenníckom a FAQ sekciou.",
+  "image": "/img/portfolio/task-flow-ai/image.png",
+  "url": "https://taskflow.esticode.sk/",
+  "demo": true,
+  "published": true
+}

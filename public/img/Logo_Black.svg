@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1731.51 435.1">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+        stroke-width: 10px;
+      }
+
+      .cls-2 {
+        fill: #231f20;
+        font-family: MongolianBaiti, 'Mongolian Baiti';
+        font-size: 335.83px;
+      }
+    </style>
+  </defs>
+  <text class="cls-2" transform="translate(575.12 332.07)"><tspan x="0" y="0">Esticode</tspan></text>
+  <g>
+    <rect class="cls-1" x="5" y="5" width="425.1" height="425.1" rx="15.57" ry="15.57"/>
+    <g>
+      <line class="cls-1" x1="276.98" y1="224" x2="94.37" y2="224"/>
+      <polyline class="cls-1" points="353.07 92.55 94.37 92.55 94.37 224 94.37 355.46 353.07 355.46"/>
+    </g>
+  </g>
+</svg>

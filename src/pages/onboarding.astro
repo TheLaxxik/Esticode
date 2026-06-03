@@ -1,0 +1,382 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/global.css';
+
+const pageTitle = 'Onboarding — Esticode';
+const pageDescription = 'Vyplňte krátky dotazník aby sme mohli pripraviť web presne podľa vašich predstáv.';
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  ogTitle={pageTitle}
+  ogDescription={pageDescription}
+>
+  <style>
+    .onboarding-wrapper {
+      background: var(--color-bg);
+      padding: var(--space-9) var(--space-5);
+      min-block-size: 100vh;
+    }
+
+    .onboarding-container {
+      max-inline-size: 42rem;
+      margin: 0 auto;
+    }
+
+    .onboarding-header {
+      text-align: center;
+      margin-block-end: var(--space-9);
+    }
+
+    .onboarding-header .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1875rem;
+      text-transform: uppercase;
+      color: #00e5a0;
+      margin-block-end: var(--space-3);
+      font-weight: 600;
+    }
+
+    .onboarding-header h1 {
+      font-size: clamp(1.75rem, 5vw, 2.25rem);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-block-end: var(--space-3);
+    }
+
+    .onboarding-header p {
+      font-size: 1rem;
+      color: var(--color-muted);
+      line-height: 1.6;
+    }
+
+    .form-section {
+      margin-block-end: var(--space-8);
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.125rem;
+      text-transform: uppercase;
+      color: #00e5a0;
+      margin-block-end: var(--space-5);
+      padding-block-end: var(--space-2);
+      border-block-end: 1px solid var(--color-line);
+      font-weight: 600;
+    }
+
+    .form-field {
+      margin-block-end: var(--space-5);
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--color-text);
+      margin-block-end: var(--space-2);
+      font-weight: 500;
+    }
+
+    label span {
+      color: #00e5a0;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    textarea,
+    select {
+      inline-size: 100%;
+      background: var(--color-inverse);
+      border: 1px solid var(--color-line);
+      border-radius: 0.5rem;
+      color: var(--color-text);
+      font-size: 0.9375rem;
+      padding: var(--space-3) var(--space-4);
+      outline: none;
+      transition: border-color var(--transition-fast);
+      font-family: inherit;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #00e5a0;
+    }
+
+    textarea {
+      resize: vertical;
+      min-block-size: 6.25rem;
+    }
+
+    select option {
+      background: var(--color-inverse);
+    }
+
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .radio-group label,
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: var(--color-inverse);
+      border: 1px solid var(--color-line);
+      border-radius: 0.5rem;
+      padding: var(--space-2) var(--space-4);
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--color-muted);
+      transition: border-color var(--transition-fast), color var(--transition-fast);
+      margin-block-end: 0;
+      font-weight: 500;
+    }
+
+    .radio-group input[type="radio"],
+    .checkbox-group input[type="checkbox"] {
+      inline-size: auto;
+      accent-color: #00e5a0;
+    }
+
+    .radio-group label:has(input:checked),
+    .checkbox-group label:has(input:checked) {
+      border-color: #00e5a0;
+      color: var(--color-text);
+    }
+
+    .submit-btn {
+      inline-size: 100%;
+      background: #00e5a0;
+      color: var(--color-bg);
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 1rem;
+      cursor: pointer;
+      transition: opacity var(--transition-fast);
+      margin-block-start: var(--space-2);
+    }
+
+    .submit-btn:hover {
+      opacity: 0.85;
+    }
+
+    .form-note {
+      font-size: 0.8125rem;
+      color: var(--color-muted);
+      text-align: center;
+      margin-block-start: var(--space-4);
+    }
+
+    @media (max-inline-size: 640px) {
+      .onboarding-wrapper {
+        padding: var(--space-8) var(--space-4);
+      }
+
+      .radio-group label,
+      .checkbox-group label {
+        flex: 1;
+        min-inline-size: calc(50% - var(--space-1));
+      }
+    }
+  </style>
+
+  <div class="onboarding-wrapper">
+    <div class="onboarding-container">
+
+      <div class="onboarding-header">
+        <p class="label">Esticode</p>
+        <h1>Začnime spolupracovať</h1>
+        <p>Vyplňte krátky dotazník aby sme mohli pripraviť web presne podľa vašich predstáv. Zaberie vám to 3–5 minút.</p>
+      </div>
+
+      <form
+        name="onboarding"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        action="/onboarding-dakujeme"
+      >
+        <!-- Honeypot proti spamu -->
+        <input type="hidden" name="form-name" value="onboarding" />
+        <p style="display:none">
+          <label>Nevypĺňajte: <input name="bot-field" /></label>
+        </p>
+
+        <!-- ─── SEKCIA 1 ─────────────────────────────────── -->
+        <div class="form-section">
+          <p class="section-title">01 — Základné info</p>
+
+          <div class="form-field">
+            <label>Názov firmy / projektu <span>*</span></label>
+            <input type="text" name="nazov_firmy" required placeholder="napr. Kaviareň Modrý Dym" />
+          </div>
+
+          <div class="form-field">
+            <label>Čím sa zaoberáte? <span>*</span></label>
+            <textarea name="popis_firmy" required placeholder="Stručne opíšte vašu firmu, čo robíte a pre koho..."></textarea>
+          </div>
+
+          <div class="form-field">
+            <label>Existujúca webová stránka (ak máte)</label>
+            <input type="url" name="existujuca_stranka" placeholder="https://..." />
+          </div>
+        </div>
+
+        <!-- ─── SEKCIA 2 ─────────────────────────────────── -->
+        <div class="form-section">
+          <p class="section-title">02 — Projekt</p>
+
+          <div class="form-field">
+            <label>Aký typ stránky chcete? <span>*</span></label>
+            <div class="radio-group">
+              <label><input type="radio" name="typ_stranky" value="Landing page" required /> Landing page</label>
+              <label><input type="radio" name="typ_stranky" value="Firemný web" /> Firemný web</label>
+              <label><input type="radio" name="typ_stranky" value="E-shop" /> E-shop</label>
+              <label><input type="radio" name="typ_stranky" value="Portfólio" /> Portfólio</label>
+              <label><input type="radio" name="typ_stranky" value="Iné" /> Iné</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Hlavný cieľ stránky <span>*</span></label>
+            <div class="radio-group">
+              <label><input type="radio" name="ciel_stranky" value="Získať kontakty / dopyt" required /> Získať kontakty / dopyt</label>
+              <label><input type="radio" name="ciel_stranky" value="Predaj produktov" /> Predaj produktov</label>
+              <label><input type="radio" name="ciel_stranky" value="Informovať návštevníkov" /> Informovať návštevníkov</label>
+              <label><input type="radio" name="ciel_stranky" value="Prezentácia portfólia" /> Prezentácia portfólia</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Máte existujúcu stránku ktorú treba prerobiť?</label>
+            <div class="radio-group">
+              <label><input type="radio" name="prerobenie" value="Áno" /> Áno</label>
+              <label><input type="radio" name="prerobenie" value="Nie, ide o nový web" /> Nie, ide o nový web</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Termín — kedy potrebujete web hotový?</label>
+            <input type="text" name="termin" placeholder="napr. do konca mája, nie je to urgentné..." />
+          </div>
+        </div>
+
+        <!-- ─── SEKCIA 3 ─────────────────────────────────── -->
+        <div class="form-section">
+          <p class="section-title">03 — Dizajn a štýl</p>
+
+          <div class="form-field">
+            <label>Páčia sa vám nejaké weby ako inšpirácia?</label>
+            <textarea name="inspiracia" placeholder="Sem vložte URL webov ktoré sa vám páčia a čo konkrétne sa vám na nich páči..."></textarea>
+          </div>
+
+          <div class="form-field">
+            <label>Preferovaný štýl</label>
+            <div class="radio-group">
+              <label><input type="radio" name="styl" value="Moderný" /> Moderný</label>
+              <label><input type="radio" name="styl" value="Minimalistický" /> Minimalistický</label>
+              <label><input type="radio" name="styl" value="Výrazný / bold" /> Výrazný / bold</label>
+              <label><input type="radio" name="styl" value="Klasický / korporátny" /> Klasický / korporátny</label>
+              <label><input type="radio" name="styl" value="Neviem, nechám na vás" /> Nechám na vás</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Preferované farby (ak máte)</label>
+            <input type="text" name="farby" placeholder="napr. tmavé tóny, zelená a biela, firemné farby sú #ff0000..." />
+          </div>
+        </div>
+
+        <!-- ─── SEKCIA 4 ─────────────────────────────────── -->
+        <div class="form-section">
+          <p class="section-title">04 — Obsah</p>
+
+          <div class="form-field">
+            <label>Čo máte pripravené? <span>*</span></label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="obsah" value="Vlastné texty" /> Vlastné texty</label>
+              <label><input type="checkbox" name="obsah" value="Vlastné fotky" /> Vlastné fotky</label>
+              <label><input type="checkbox" name="obsah" value="Logo" /> Logo</label>
+              <label><input type="checkbox" name="obsah" value="Nič zatiaľ" /> Nič zatiaľ</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Potrebujete napísať texty za vás? (Copywriting)</label>
+            <div class="radio-group">
+              <label><input type="radio" name="copywriting" value="Áno, mám záujem" /> Áno, mám záujem</label>
+              <label><input type="radio" name="copywriting" value="Nie, mám vlastné" /> Nie, mám vlastné</label>
+              <label><input type="radio" name="copywriting" value="Ešte neviem" /> Ešte neviem</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── SEKCIA 5 ─────────────────────────────────── -->
+        <div class="form-section">
+          <p class="section-title">05 — Technické</p>
+
+          <div class="form-field">
+            <label>Máte doménu (napr. mojastranka.sk)?</label>
+            <div class="radio-group">
+              <label><input type="radio" name="domena" value="Áno, mám" /> Áno, mám</label>
+              <label><input type="radio" name="domena" value="Nie, treba zabezpečiť" /> Nie, treba zabezpečiť</label>
+              <label><input type="radio" name="domena" value="Neviem" /> Neviem</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Máte záujem o mesačnú správu webu po dokončení? (50 € / mesiac)</label>
+            <div class="radio-group">
+              <label><input type="radio" name="sprava_webu" value="Áno, mám záujem" /> Áno, mám záujem</label>
+              <label><input type="radio" name="sprava_webu" value="Nie" /> Nie</label>
+              <label><input type="radio" name="sprava_webu" value="Ešte neviem" /> Ešte neviem</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── SEKCIA 6 ─────────────────────────────────── -->
+        <div class="form-section">
+          <p class="section-title">06 — Rozpočet a kontakt</p>
+
+          <div class="form-field">
+            <label>Orientačný rozpočet <span>*</span></label>
+            <div class="radio-group">
+              <label><input type="radio" name="rozpocet" value="do 300 €" required /> do 300 €</label>
+              <label><input type="radio" name="rozpocet" value="300 – 600 €" /> 300 – 600 €</label>
+              <label><input type="radio" name="rozpocet" value="600 – 1000 €" /> 600 – 1000 €</label>
+              <label><input type="radio" name="rozpocet" value="1000 € +" /> 1000 € +</label>
+              <label><input type="radio" name="rozpocet" value="Ešte neviem" /> Ešte neviem</label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Váš email <span>*</span></label>
+            <input type="email" name="email" required placeholder="vas@email.sk" />
+          </div>
+
+          <div class="form-field">
+            <label>Telefón (nepovinné)</label>
+            <input type="text" name="telefon" placeholder="+421 900 000 000" />
+          </div>
+
+          <div class="form-field">
+            <label>Čokoľvek ďalšie čo by sme mali vedieť</label>
+            <textarea name="poznamky" placeholder="Ďalšie požiadavky, otázky, alebo čokoľvek čo nám chcete povedať..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Odoslať dotazník →</button>
+        <p class="form-note">Po odoslaní vás budeme kontaktovať do 24 hodín.</p>
+
+      </form>
+    </div>
+  </div>
+</BaseLayout>
