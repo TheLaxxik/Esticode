@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 
+const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 const allReviews = await getCollection('reviews');
 const approvedReviews = allReviews.filter(review => review.data.approved === true);
 const allProjects = await getCollection('projects');
@@ -16,6 +17,13 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
   ogDescription="Rýchle a čisté weby s dôrazom na dôveru, mobilný zážitok a jasné výsledky."
 >
   <Fragment slot="head">
+    {recaptchaSiteKey && (
+      <script
+        src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`}
+        async
+        defer
+      ></script>
+    )}
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -277,7 +285,7 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
           </article>
 
           {/* OPRAVENÝ FORMULÁR PRE NETLIFY FORMS */}
-          <form class="contact-form" id="contact-form" name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-label="Kontaktný formulár">
+          <form class="contact-form" id="contact-form" name="kontakt" method="POST" data-netlify="true" data-contact-handler="astro" netlify-honeypot="bot-field" aria-label="Kontaktný formulár">
             {/* Skryté inputs nutné pre úspešný zber dát v Netlify */}
             <input type="hidden" name="form-name" value="kontakt" />
             <p style="display:none;">
@@ -503,18 +511,36 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
     </div>
   </footer>
 
-  <script>
+  <script define:vars={{ recaptchaSiteKey }}>
     import '../scripts/main.js';
 
     // === OBSLUHA DOPYTOVÉHO FORMULÁRA (NETLIFY) ===
-    const contactForm = document.getElementById('contact-form') as HTMLFormElement;
+    const contactForm = document.getElementById('contact-form');
     const contactFeedback = document.getElementById('contact-feedback');
+
+    function waitForRecaptcha() {
+      return new Promise((resolve, reject) => {
+        const grecaptcha = window['grecaptcha'];
+
+        if (!recaptchaSiteKey) {
+          reject(new Error('Chýba PUBLIC_RECAPTCHA_SITE_KEY.'));
+          return;
+        }
+
+        if (!grecaptcha) {
+          reject(new Error('reCAPTCHA script sa nepodarilo načítať.'));
+          return;
+        }
+
+        grecaptcha.ready(() => resolve(undefined));
+      });
+    }
 
     if (contactForm) {
       contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const submitBtn = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement;
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
 
         if (contactFeedback) {
@@ -525,18 +551,15 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
         const formData = new FormData(contactForm);
 
         try {
+          await waitForRecaptcha();
+
+          const token = await window['grecaptcha'].execute(recaptchaSiteKey, { action: 'submit' });
+          formData.set('recaptcha_token', token);
+          formData.set('recaptchaToken', token);
+
           const response = await fetch('/api/contact', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              meno: formData.get('meno'),
-              email: formData.get('email'),
-              firma: formData.get('firma'),
-              rozpocet: formData.get('rozpocet'),
-              termin: formData.get('termin'),
-              typWebu: formData.get('typ-webu'),
-              sprava: formData.get('sprava'),
-           })
+            body: formData,
           });
 
           const result = await response.json();
@@ -544,9 +567,11 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
           if (response.ok && result.success) {
             if (contactFeedback) {
               contactFeedback.textContent = '✅ Dopyt bol úspešne odoslaný! Ozveme sa vám čo najskôr.';
-          contactFeedback.style.color = '#4ade80';
+              contactFeedback.style.color = '#4ade80';
             }
             contactForm.reset();
+          } else if (response.status === 403) {
+            throw new Error(result.error || 'Formulár bol označený ako podozrivý.');
           } else {
             throw new Error(result.error || 'Chyba servera');
           }
@@ -563,14 +588,14 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
     }
 
     // === OBSLUHA FORMULÁRA NA RECENZIE ===
-    const reviewForm = document.getElementById('review-form') as HTMLFormElement | null;
+    const reviewForm = document.getElementById('review-form');
     const formFeedback = document.getElementById('form-feedback');
 
     if (reviewForm) {
       reviewForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const submitBtn = reviewForm.querySelector('button[type="submit"]') as HTMLButtonElement;
+        const submitBtn = reviewForm.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
 
         if (formFeedback) {
@@ -579,12 +604,12 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
         }
 
         // Načítanie hodnôt z formulára
-        const authorName = (document.getElementById('review-name') as HTMLInputElement).value;
-        const businessName = (document.getElementById('review-business') as HTMLInputElement).value;
-        const emailValue = (document.getElementById('review-email') as HTMLInputElement).value;
-        const projectCode = (document.getElementById('review-project-code') as HTMLInputElement).value;
-        const ratingValue = (document.getElementById('review-rating') as HTMLSelectElement).value;
-        const messageValue = (document.getElementById('review-message') as HTMLTextAreaElement).value;
+        const authorName = document.getElementById('review-name').value;
+        const businessName = document.getElementById('review-business').value;
+        const emailValue = document.getElementById('review-email').value;
+        const projectCode = document.getElementById('review-project-code').value;
+        const ratingValue = document.getElementById('review-rating').value;
+        const messageValue = document.getElementById('review-message').value;
 
         try {
           const response = await fetch('/api/review', {
@@ -614,7 +639,7 @@ const publishedProjects = allProjects.filter(p => p.data.published === true);
             throw new Error(result.error || 'Neznáma chyba na serveri');
           }
 
-        } catch (error: any) {
+        } catch (error) {
           console.error('Chyba pri odosielaní:', error);
           if (formFeedback) {
             formFeedback.textContent = `❌ Nepodarilo sa odoslať: ${error.message || 'Skontrolujte pripojenie'}`

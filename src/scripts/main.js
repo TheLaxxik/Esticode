@@ -276,7 +276,7 @@ function initContactForm() {
   const form = document.querySelector('.contact-form');
   const message = document.querySelector('.form-message');
 
-  if (!form || !message) {
+  if (!form || !message || form.getAttribute('data-contact-handler') === 'astro') {
     return;
   }
 
